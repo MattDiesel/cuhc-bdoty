@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<title>BDotY{% if not title == "" %} - {{ title|escape }}{% endif %}</title>
+	<link rel="shortcut icon" href="favicon.ico">
+
+	<link rel="manifest" href="webapp.json">
+	<meta name="theme-color" content="#99D9EA">
+
+	<meta name="msapplication-navbutton-color" content="#99D9EA">
+
+	<link rel="apple-touch-icon" href="img/launcher-icon-4x.png">
+	<meta name="apple-mobile-web-app-title" content="BDotY">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="#99D9EA">
+
+	<link rel="stylesheet" href="css/themes/default/jquery.mobile-1.4.5.min.css">
+	<link rel="stylesheet" href="css/bdoty.css">
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,700">
+
+	<script src="js/jquery.js"></script>
+	<script src="js/bdoty.js"></script>
+	<script src="js/jquery.mobile-1.4.5.min.js"></script>
+</head>
+<body>
+<div data-role="page" class="bdoty">
+
+	<div data-role="header" data-position="fixed" class="bdoty-header" data-id="bdotyheader" data-theme="a">
+		<h2><img src="img/bdoty-logo.png" alt="BDotY Logo"></h2>
+		<a href="#" class="bdoty-navmenu-link ui-btn ui-btn-icon-notext ui-corner-all ui-icon-bars ui-nodisc-icon ui-alt-icon ui-btn-left">Menu</a>
+		{% if loggedin %}
+			<a href="#" class="bdoty-user-link ui-btn ui-btn-icon-notext ui-corner-all ui-icon-user ui-nodisc-icon ui-alt-icon ui-btn-right">User</a>
+		{% else %}
+			<a href="#" class="bdoty-login-link ui-btn ui-btn-icon-notext ui-corner-all ui-icon-user ui-nodisc-icon ui-alt-icon ui-btn-right">Login</a>
+		{% endif %}	
+	</div><!-- /header -->
+
+
+	<div role="main" class="ui-content" data-theme="a">
+		<h1>{{ title|escape }}</h1>
+
+		{% block content %}{% endblock %}
+	</div>
+
+	{{ menu }}
+
+	{{ usermenu }}
+
+	{{ loginmenu }}
+
+	<div data-role="footer" class="bdoty-footer" data-position="fixed" data-id="bdoty-footer" data-theme="a">
+		<p>Copyright 2017 The CUHC Media Empire</p>
+	</div><!-- /footer -->
+
+</div>
+</body>
+</html>

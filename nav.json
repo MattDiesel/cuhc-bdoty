@@ -1,0 +1,6 @@
+{
+	"submenu": [
+		{"text": "Home", "link": "/", "icon": "home"},
+		{"text": "Hymn Book", "link": "/hymns"}
+	]
+}

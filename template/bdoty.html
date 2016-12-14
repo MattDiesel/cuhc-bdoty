@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>BDotY App!</title>
+	<link rel="shortcut icon" href="favicon.ico">
+	<link rel="stylesheet" href="css/themes/default/jquery.mobile-1.4.5.min.css">
+	<link rel="stylesheet" href="assets/css/jqm-demos.css">
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,700">
+
+	<script src="js/jquery.js"></script>
+	<script src="assets/js/index.js"></script>
+	<script src="js/jquery.mobile-1.4.5.min.js"></script>
+</head>
+<body>
+<div data-role="page" class="jqm-demos jqm-home">
+
+	<div data-role="header" class="jqm-header">
+		<h2><img src="img/bdoty-logo.png" alt="jQuery Mobile"></h2>
+		<p>Version <span class="jqm-version"></span></p>
+		<a href="#" class="jqm-navmenu-link ui-btn ui-btn-icon-notext ui-corner-all ui-icon-bars ui-nodisc-icon ui-alt-icon ui-btn-left">Menu</a>
+		<a href="#" class="jqm-search-link ui-btn ui-btn-icon-notext ui-corner-all ui-icon-search ui-nodisc-icon ui-alt-icon ui-btn-right">Search</a>
+	</div><!-- /header -->
+
+
+	<div role="main" class="ui-content jqm-content" data-theme="a">
+		<h1>Best Day of the Year</h1>
+
+		<p><strong>jQuery Mobile is a touch-optimized HTML5 UI framework designed to make responsive web sites and apps that are accessible on all smartphone, tablet and desktop devices.</strong></p>
+
+	    	<ul data-role="listview" data-inset="true" data-filter="true">
+				<li data-filtertext="wings sparrow" data-icon="home"><a href=".././">Wings of a Sparrow</a></li>
+				<li data-filtertext="famous oxford poly rome pope"><a href="../intro/">The Famous Oxf*rd Poly</a></li>
+				<li data-filtertext="more moore"><a href="../button-markup/">More more moore</a></li>
+				<li data-filtertext="diesel"><a href="../button/">Hello Diesel my old Friend</a></li>
+			</ul>
+
+	</div>
+
+
+	    <div data-role="panel" class="jqm-navmenu-panel" data-position="left" data-display="overlay" data-theme="a">
+	    	<ul class="jqm-list ui-alt-icon ui-nodisc-icon">
+				<li data-filtertext="demos homepage" data-icon="home"><a href=".././">Home</a></li>
+				<li data-filtertext="introduction overview getting started"><a href="../intro/">Introduction</a></li>
+				<li data-filtertext="buttons button markup buttonmarkup method anchor link button element"><a href="../button-markup/">Buttons</a></li>
+				<li data-filtertext="form button widget input button submit reset"><a href="../button/">Button widget</a></li>
+				<li data-role="collapsible" data-enhanced="true" data-collapsed-icon="carat-d" data-expanded-icon="carat-u" data-iconpos="right" data-inset="false" class="ui-collapsible ui-collapsible-themed-content ui-collapsible-collapsed">
+					<h3 class="ui-collapsible-heading ui-collapsible-heading-collapsed">
+						<a href="#" class="ui-collapsible-heading-toggle ui-btn ui-btn-icon-right ui-btn-inherit ui-icon-carat-d">
+						    Checkboxradio widget<span class="ui-collapsible-heading-status"> click to expand contents</span>
+						</a>
+					</h3>
+					<div class="ui-collapsible-content ui-body-inherit ui-collapsible-content-collapsed" aria-hidden="true">
+						<ul>
+							<li data-filtertext="form checkboxradio widget checkbox input checkboxes controlgroups"><a href="../checkboxradio-checkbox/">Checkboxes</a></li>
+							<li data-filtertext="form checkboxradio widget radio input radio buttons controlgroups"><a href="../checkboxradio-radio/">Radio buttons</a></li>
+						</ul>
+					</div>
+				</li>
+<li data-role="collapsible" data-enhanced="true" data-collapsed-icon="carat-d" data-expanded-icon="carat-u" data-iconpos="right" data-inset="false" class="ui-collapsible ui-collapsible-themed-content ui-collapsible-collapsed">
+	<h3 class="ui-collapsible-heading ui-collapsible-heading-collapsed">
+		<a href="#" class="ui-collapsible-heading-toggle ui-btn ui-btn-icon-right ui-btn-inherit ui-icon-carat-d">
+			Collapsible (set) widget<span class="ui-collapsible-heading-status"> click to expand contents</span>
+		</a>
+	</h3>
+	<div class="ui-collapsible-content ui-body-inherit ui-collapsible-content-collapsed" aria-hidden="true">
+		<ul>
+			<li data-filtertext="collapsibles content formatting"><a href="../collapsible/">Collapsible</a></li>
+			<li data-filtertext="dynamic collapsible set accordion append expand"><a href="../collapsible-dynamic/">Dynamic collapsibles</a></li>
+			<li data-filtertext="accordions collapsible set widget content formatting grouped collapsibles"><a href="../collapsibleset/">Collapsible set</a></li>
+		</ul>
+	</div>
+</li>
+<li data-role="collapsible" data-enhanced="true" data-collapsed-icon="carat-d" data-expanded-icon="carat-u" data-iconpos="right" data-inset="false" class="ui-collapsible ui-collapsible-themed-content ui-collapsible-collapsed">
+	<h3 class="ui-collapsible-heading ui-collapsible-heading-collapsed">
+		<a href="#" class="ui-collapsible-heading-toggle ui-btn ui-btn-icon-right ui-btn-inherit ui-icon-carat-d">
+			Controlgroup widget<span class="ui-collapsible-heading-status"> click to expand contents</span>
+		</a>
+	</h3>
+	<div class="ui-collapsible-content ui-body-inherit ui-collapsible-content-collapsed" aria-hidden="true">
+		<ul>
+			<li data-filtertext="controlgroups selectmenu checkboxradio input grouped buttons horizontal vertical"><a href="../controlgroup/">Controlgroup</a></li>
+			<li data-filtertext="dynamic controlgroup dynamically add buttons"><a href="../controlgroup-dynamic/">Dynamic controlgroups</a></li>
+		</ul>
+	</div>
+</li>
+<li data-filtertext="form datepicker widget date input"><a href="../datepicker/">Datepicker</a></li>
+</ul>
+</div>
+
+
+	<div data-role="footer" data-position="fixed" data-tap-toggle="false" class="jqm-footer">
+		<p>jQuery Mobile Demos version <span class="jqm-version"></span></p>
+		<p>Copyright 2014 The jQuery Foundation</p>
+	</div><!-- /footer -->
+
+    <div data-role="panel" class="jqm-search-panel" data-position="right" data-display="overlay" data-theme="a">
+		<div class="jqm-search">
+			<ul class="jqm-list" data-filter-placeholder="Search demos..." data-filter-reveal="true">
+				<li data-filtertext="demos homepage" data-icon="home"><a href=".././">Home</a></li>
+				<li data-filtertext="introduction overview getting started"><a href="../intro/">Introduction</a></li>
+				<li data-filtertext="buttons button markup buttonmarkup method anchor link button element"><a href="../button-markup/">Buttons</a></li>
+				<li data-filtertext="form button widget input button submit reset"><a href="../button/">Button widget</a></li>
+				<li data-role="collapsible" data-enhanced="true" data-collapsed-icon="carat-d" data-expanded-icon="carat-u" data-iconpos="right" data-inset="false" class="ui-collapsible ui-collapsible-themed-content ui-collapsible-collapsed">
+					<h3 class="ui-collapsible-heading ui-collapsible-heading-collapsed">
+						<a href="#" class="ui-collapsible-heading-toggle ui-btn ui-btn-icon-right ui-btn-inherit ui-icon-carat-d">
+						    Checkboxradio widget<span class="ui-collapsible-heading-status"> click to expand contents</span>
+						</a>
+					</h3>
+					<div class="ui-collapsible-content ui-body-inherit ui-collapsible-content-collapsed" aria-hidden="true">
+						<ul>
+							<li data-filtertext="form checkboxradio widget checkbox input checkboxes controlgroups"><a href="../checkboxradio-checkbox/">Checkboxes</a></li>
+							<li data-filtertext="form checkboxradio widget radio input radio buttons controlgroups"><a href="../checkboxradio-radio/">Radio buttons</a></li>
+						</ul>
+					</div>
+				</li>
+			</ul>
+		</div>
+	</div><!-- /panel -->
+
+</div>
+</body>
+</html>

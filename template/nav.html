@@ -1,7 +1,7 @@
 
 <!-- Nav -->
-<div data-role="panel" class="bdoty-navmenu" data-position="left" data-display="overlay">
-<ul class="ui-alt-icon ui-nodisc-icon">
+<div data-role="panel" class="{{ name }}" data-position="{{ nav.pos|default('left') }}" data-display="overlay">
+<ul data-role="listview" class="ui-alt-icon ui-nodisc-icon">
 	{% for i in nav.submenu recursive %}
 		{% if i.submenu is defined %}
 			<li data-role="collapsible" data-collapsed-icon="carat-d" data-expanded-icon="carat-u" data-iconpos="right" data-inset="false" class="ui-collapsible ui-collapsible-themed-content ui-collapsible-collapsed">
@@ -16,6 +16,10 @@
 					</ul>
 				</div>
 			</li>
+		{% elif i.divider|default('False') == 'True' %}
+			<li data-role="list-divider"></li>
+		{% elif i.link == None %}
+			<li data-filtertext="{{ i.filter|default(i.text) }}" {% if i.icon is defined %}data-icon="{{ i.icon }}"{% endif %}>{{ i.text }}</li>
 		{% else %}
 			<li data-filtertext="{{ i.filter|default(i.text) }}" {% if i.icon is defined %}data-icon="{{ i.icon }}"{% endif %}><a href="{{ i.link }}">{{ i.text }}</a></li>
 		{% endif %}

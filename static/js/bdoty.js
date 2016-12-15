@@ -161,6 +161,14 @@ $( document ).on( "pagecreate", ".bdoty", function( event ) {
 		page.find( ".bdoty-navmenu:not(.jqm-panel-page-nav)" ).panel( "open" );
 	});
 
+	$( ".bdoty-user-link" ).on( "click", function() {
+		page.find( ".bdoty-usermenu" ).panel( "open" );
+	});
+
+	$( ".bdoty-login-link" ).on( "click", function() {
+		page.find( ".bdoty-loginmenu" ).panel( "open" );
+	});
+
 	$( ".bdoty-hymn-menu" ).click( function(event) {
 		selected = $( event.target ).attr('data-hymn'); 
 		$( "#hymnmenu" ).find( ".bdoty-hymn-edit" ).attr("href", "/hymns/edit?k=" + selected); 

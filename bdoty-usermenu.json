@@ -1,0 +1,7 @@
+{
+	"pos": "right",
+	"submenu": [
+		{"text": "Log In", "link": "/", "icon": "home"},
+		{"text": "Hymn Book", "link": "/hymns"}
+	]
+}

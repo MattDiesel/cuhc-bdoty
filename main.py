@@ -22,38 +22,59 @@ import urllib
 import webapp2
 import jinja2
 from google.appengine.ext import ndb
+from google.appengine.api import memcache, users
 
 import models
 import view
 
 
 
-class MainHandler(webapp2.RequestHandler):
+class BaseHandler(webapp2.RequestHandler):
+    def __init__(self, request, response):
+        self.initialize(request, response)
+
+        self.user = users.get_current_user()
+        self.loggedin = bool(self.user)
+
+
+    # def handle_exception(self, exception, debug):
+    #     # Log the error.
+    #     logging.exception(exception)
+
+    #     # Set a custom message.
+    #     response.write('An error occurred.')
+
+    #     # If the exception is a HTTPException, use its error code.
+    #     # Otherwise use a generic 500 error code.
+    #     if isinstance(exception, webapp2.HTTPException):
+    #         response.set_status(exception.code)
+    #     else:
+    #         response.set_status(500)
+
+
+
+
+class MainHandler(BaseHandler):
     def get(self):
-        p = view.ElPage()
+        p = view.ElPage(self.user, self.request.path)
         p.title = ''
         p.content = '<p>Hello, World!</p>'
         p.navactive = 'home'
 
-        p.loggedin = False;
-
-        
         self.response.write(p.render())
 
 
-class HymnListHandler(webapp2.RequestHandler):
+class HymnListHandler(BaseHandler):
     def get(self):
-        p = view.ElHymnListPage()
+        p = view.ElHymnListPage(self.user)
         p.title = 'Hymn Book'
-
-        p.loggedin = True;
         p.hymn_q = models.Hymn.list()
         
         self.response.write(p.render())
 
 
 
-class HymnHandler(webapp2.RequestHandler):
+class HymnHandler(BaseHandler):
     def get(self):
         k = self.request.get('k')
         try:
@@ -61,22 +82,28 @@ class HymnHandler(webapp2.RequestHandler):
         except:
             self.response.set_status(400)
 
-        p = view.ElHymnPage(h)
-        p.loggedin = True
+        p = view.ElHymnPage(h, self.user)
 
         self.response.write(p.render())
 
-class EditHymnHandler(webapp2.RequestHandler):
+
+class EditHymnHandler(BaseHandler):
     def get(self):
+
+        if notself.loggedin:
+            self.response.set_status(403)
+            return
 
         k = self.request.get('k')
         try:
             h = ndb.Key(urlsafe=k).get()
         except:
             self.response.set_status(400)
+            return
 
-        p = view.ElPage()
+        p = view.ElPage(self.user)
         p.title = 'Edit Hymn'
+        p.navactive = 'hymns'
 
         f = view.ElForm()
         f.action = "/hymns/edit?k=" + k
@@ -103,11 +130,16 @@ class EditHymnHandler(webapp2.RequestHandler):
 
 
 
-class AddHymnHandler(webapp2.RequestHandler):
+class AddHymnHandler(BaseHandler):
     def get(self):
-        p = view.ElPage()
+        if notself.loggedin:
+            self.response.set_status(403)
+            return
+
+        p = view.ElPage(self.user, '/hymns/add')
+
         p.title = 'Add Hymn'
-        p.loggedin = True
+        p.navactive = 'hymns'
 
         f = view.ElForm()
         f.action = "/hymns/add"
@@ -121,6 +153,10 @@ class AddHymnHandler(webapp2.RequestHandler):
         self.response.write(p.render())
 
     def post(self):
+        if notself.loggedin:
+            self.response.set_status(403)
+            return
+            
         h = models.Hymn.create()
         h.title = self.request.get('title')
         h.text = self.request.get('text')

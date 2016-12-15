@@ -1,5 +1,5 @@
 
-<ol class="ui-alt-icon ui-nodisc-icon" data-role="listview" data-inset="true" data-filter="true">
+<{{ listtype|default('ul') }} class="ui-alt-icon ui-nodisc-icon" data-role="listview" data-inset="true" data-filter="{{ filterable|default('false') }}">
 	{% for i in items recursive %}
 		{% if i.subitems is defined %}
 			<li data-role="collapsible" data-collapsed-icon="carat-d" data-expanded-icon="carat-u" data-iconpos="right" data-inset="false" class="ui-collapsible ui-collapsible-themed-content ui-collapsible-collapsed">
@@ -9,13 +9,20 @@
 					</a>
 				</h3>
 				<div class="ui-collapsible-content ui-body-inherit ui-collapsible-content-collapsed" aria-hidden="true">
-					<ol>
+					<{{ listtype|default('ul') }}>
 						{{ loop(i.subitems) }}
-					</ol>
+					</{{ listtype|default('ul') }}>
 				</div>
 			</li>
 		{% else %}
-			<li data-filtertext="{{ i.filter|default(i.text) }}" {% if i.icon is defined %}data-icon="{{ i.icon }}"{% endif %}><a href="{{ i.link }}">{{ i.text }}</a></li>
+			<li data-filtertext="{{ i.filter|default(i.text) }}" {% if i.icon is defined %}data-icon="{{ i.icon }}"{% endif %}>
+				<a href="{{ i.link }}">{{ i.text }}</a>
+				{% if not splitlink == '' %}
+        			<a href="#{{ splitlinklink }}" data-rel="popup" data-icon="gear" class="{{ splitlink }}">
+        				{{ splitlinktext|default('Menu') }}
+        			</a>
+        		{% endif %}
+			</li>
 		{% endif %}
 	{% endfor %}
-</ol>
+</{{ listtype|default('ul') }}>

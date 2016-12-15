@@ -1,0 +1,12 @@
+<form method="{{ method|default('post') }}" action="{{ action|default('.') }}">
+	{% for el in elements %}
+		<div class="ui-field-contain">
+			{{ el.render() }}
+		</div>
+	{% endfor %}
+	<div data-role="controlgroup" data-type="horizontal" class="ui-mini">
+		<a href="/hymns" data-rel="back" class="ui-btn ui-btn-icon-left ui-icon-back">Back</a>
+		<input type="reset" value="Reset" data-icon="refresh">
+		<input type="submit" value="Submit" data-icon="check">
+	</div>
+</form>

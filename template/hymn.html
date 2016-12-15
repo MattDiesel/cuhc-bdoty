@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div data-role="controlgroup" data-type="horizontal" class="ui-mini">
+	<a href="/hymns" data-rel="back" class="ui-btn ui-btn-icon-left ui-icon-back">Back</a>
+
+	{% if loggedin|default(False) %}
+		<a href="/hymns/edit?k={{ hkey }}" class="ui-btn ui-btn-icon-left ui-icon-edit">Edit</a>
+		<a href="/hymns/delete?k={{ hkey }}" class="ui-btn ui-btn-icon-left ui-icon-delete">Delete</a>
+	{% endif %}
+</div>
+
+<p>{{ text }}</p>
+
+{% endblock %}

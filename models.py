@@ -21,13 +21,13 @@ class Hymn(ndb.Model):
         return ndb.Key("book", "cuhc")
 
     @classmethod
-    def create(cls, title, text):
-        h = cls(parent=cls.common_ancestor(), title=title, text=text)
-        h.put()
+    def create(cls):
+        h = cls(parent=cls.common_ancestor())
+        return h
 
     @classmethod
     def list(cls):
-        return cls.query(ancestor=cls.common_ancestor(), projection=['title']).order(index, -cls.created)
+        return cls.query(ancestor=cls.common_ancestor(), projection=['title', 'tags']).order(cls.index, -cls.created)
 
     class HymnEncoder(json.JSONEncoder):
         def default(self, obj):
@@ -50,6 +50,7 @@ class Hymn(ndb.Model):
 
 
 class Team(ndb.Model):
+    year = ndb.IntegerProperty()
     index = ndb.IntegerProperty()
     name = ndb.StringProperty()
 

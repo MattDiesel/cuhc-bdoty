@@ -33,6 +33,7 @@ class MainHandler(webapp2.RequestHandler):
         p = view.ElPage()
         p.title = ''
         p.content = '<p>Hello, World!</p>'
+        p.navactive = 'home'
 
         p.loggedin = False;
 
@@ -42,26 +43,90 @@ class MainHandler(webapp2.RequestHandler):
 
 class HymnListHandler(webapp2.RequestHandler):
     def get(self):
-        p = view.ElPage()
+        p = view.ElHymnListPage()
         p.title = 'Hymn Book'
-        p.content = '<p>Hello, World!</p>'
 
         p.loggedin = True;
-
-        l = view.ElList()
-
-        for i in range(1,10):
-            l.add("Hello", "#")
-
-        p.content += l.render()
+        p.hymn_q = models.Hymn.list()
         
         self.response.write(p.render())
 
 
-class AddHymn(webapp2.RequestHandler):
+
+class HymnHandler(webapp2.RequestHandler):
     def get(self):
-        models.Hymn.create("Wings of a Sparrow", "If I had the Wings of a Sparrow")
-        self.response.write('Hello world!')
+        k = self.request.get('k')
+        try:
+            h = ndb.Key(urlsafe=k).get()
+        except:
+            self.response.set_status(400)
+
+        p = view.ElHymnPage(h)
+        p.loggedin = True
+
+        self.response.write(p.render())
+
+class EditHymnHandler(webapp2.RequestHandler):
+    def get(self):
+
+        k = self.request.get('k')
+        try:
+            h = ndb.Key(urlsafe=k).get()
+        except:
+            self.response.set_status(400)
+
+        p = view.ElPage()
+        p.title = 'Edit Hymn'
+
+        f = view.ElForm()
+        f.action = "/hymns/edit?k=" + k
+        f.add(view.ElFormElem('input', 'title', 'Title: ', h.title))
+        f.add(view.ElFormElem('textarea', 'text', 'Text: ', h.text))
+        f.add(view.ElFormElem('input', 'tags', 'Tags: ', h.tags))
+
+        p.content = f.render()
+
+        self.response.write(p.render())
+
+    def post(self):
+
+        k = self.request.get('k')
+        try:
+            h = ndb.Key(urlsafe=k).get()
+        except:
+            self.response.set_status(400)
+
+        h.title = self.request.get('title')
+        h.text = self.request.get('text')
+        h.tags = self.request.get('tags')
+        h.put()
+
+
+
+class AddHymnHandler(webapp2.RequestHandler):
+    def get(self):
+        p = view.ElPage()
+        p.title = 'Add Hymn'
+        p.loggedin = True
+
+        f = view.ElForm()
+        f.action = "/hymns/add"
+        f.add(view.ElFormElem('input', 'title', 'Title: ', ''))
+        f.add(view.ElFormElem('textarea', 'text', 'Text: ', ''))
+        f.add(view.ElFormElem('input', 'tags', 'Tags: ', ''))
+        f.add(view.ElFormElem('number', 'index', 'Index: ', ''))
+
+        p.content = f.render()
+
+        self.response.write(p.render())
+
+    def post(self):
+        h = models.Hymn.create()
+        h.title = self.request.get('title')
+        h.text = self.request.get('text')
+        h.tags = self.request.get('tags')
+        h.index = int(self.request.get('index'))
+        h.put()
 
 
 
@@ -97,7 +162,10 @@ class AddHymn(webapp2.RequestHandler):
 
 
 app = webapp2.WSGIApplication([
-    ('/add', AddHymn),
+    ('/hymns/add', AddHymnHandler),
+    ('/hymns/edit', EditHymnHandler),
+    ('/hymns/delete', EditHymnHandler),
     ('/hymns', HymnListHandler),
+    ('/hymn', HymnHandler),
     ('/', MainHandler)
 ], debug=True)

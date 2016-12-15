@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div data-role="controlgroup" data-type="horizontal" class="ui-mini">
+	<a href="/" data-rel="back" class="ui-btn ui-btn-icon-left ui-icon-back">Back</a>
+
+	{% if loggedin|default(False) %}
+		<a href="/hymns/add" class="ui-btn ui-btn-icon-left ui-icon-plus">Add</a>
+	{% endif %}
+</div>
+
+<ol class="ui-alt-icon ui-nodisc-icon" data-role="listview" data-inset="true" data-filter="true">
+	{% for i in hymn_q.fetch(200) %}
+		<li data-filtertext="{{ i.tags }}">
+			<a href="/hymn?k={{ i.key.urlsafe() }}">{{ i.title }}</a>
+			{% if loggedin %}
+				<a href="#hymnmenu" data-rel="popup" data-icon="gear" class="bdoty-hymn-menu" data-hymn="{{ i.key.urlsafe() }}">
+					Menu
+				</a>
+			{% endif %}
+		</li>
+	{% endfor %}
+</ol>
+
+{% if loggedin %}
+	<div data-role="popup" id="hymnmenu">
+		<ul class="ui-alt-icon ui-nodisc-icon" data-role="listview" data-inset="true" data-filter="false">
+			<li data-filtertext="Delete" data-icon="delete">
+				<a href="#" class="bdoty-hymn-delete ui-btn ui-btn-icon-right ui-icon-delete">Delete</a>
+			</li>
+			<li data-filtertext="Edit" data-icon="edit">
+				<a href="#" class="bdoty-hymn-edit ui-btn ui-btn-icon-right ui-icon-edit">Edit</a>
+			</li>
+		</ul>
+	</div>
+{% endif %}
+
+{% endblock %}

@@ -161,6 +161,15 @@ $( document ).on( "pagecreate", ".bdoty", function( event ) {
 		page.find( ".bdoty-navmenu:not(.jqm-panel-page-nav)" ).panel( "open" );
 	});
 
+	$( ".bdoty-hymn-menu" ).click( function(event) {
+		selected = $( event.target ).attr('data-hymn'); 
+		$( "#hymnmenu" ).find( ".bdoty-hymn-edit" ).attr("href", "/hymns/edit?k=" + selected); 
+		$( "#hymnmenu" ).find( ".bdoty-hymn-delete" ).attr("href", "/hymns/delete?k=" + selected);
+	});
+
+
+
+
 	// Fix links on homepage to point to sub directories
 	if ( $( event.target ).hasClass( "jqm-home") ) {
 		$( this ).find( "a" ).each( function() {

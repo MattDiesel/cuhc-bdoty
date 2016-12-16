@@ -1,8 +1,32 @@
 {% extends "base.html" %}
 
 {% block content %}
+<h1>{{ title }}</h1>
+<p>{{ summary }}</p>
+<h3>Players</h3>
 
-{{ content }}
-
-
+{% for p in players %}
+	<a class="bdoty-picbtn" data-role="button" href="/profile?t={{ p.key.urlsafe() }}">
+		{% if p.picture == None %}
+			<img src="http://www.bluebirdnews.co.uk/wp-content/uploads/2014/11/WB-team-photo.jpg">
+		{% else %}
+			<img src="/res/{{ p.picture }}.png">
+		{% endif %}
+		<span>{{ p.name }}</span>
+	</a>
+{% endfor %}
 {% endblock %}
+
+
+{% block footer %}
+<div data-role="footer" class="bdoty-footer" data-position="fixed" data-theme="a">
+	<div data-role="controlgroup" data-type="horizontal" class="ui-mini">
+		<a href="/teams" data-rel="back" class="ui-btn ui-btn-icon-left ui-icon-back">Back</a>
+
+		{% if loggedin|default(False) %}
+			<a href="/team/edit?t={{ team.key.urlsafe() }}" class="ui-btn ui-btn-icon-left ui-icon-plus">Add</a>
+		{% endif %}
+	</div>
+</div>
+{% endblock %}
+

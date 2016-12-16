@@ -87,8 +87,10 @@ class ElTeamPage(ElPage):
 
         self.navactive = 'profiles'
         self.title = team.name
+        self.summary = team.summary
+        self.team = team
 
-        self.content = "<h1>" + team.name + "</h1>"
+        self.players = []
 
 class ElTeamListPage(ElPage):
     def __init__(self, user):
@@ -97,7 +99,7 @@ class ElTeamListPage(ElPage):
         self.navactive = 'profiles'
         self.title = 'Teams'
 
-        self.teams = []
+        self.team_q = []
 
 
 

@@ -77,11 +77,12 @@ class Player(ndb.Model):
     """A CUHC Member"""
 
     name = ndb.StringProperty()
-    team = ndb.KeyProperty(kind=Team) # Use parent()
+    team = ndb.KeyProperty(kind=Team)
+    shirt = ndb.IntegerProperty()
+    index = ndb.IntegerProperty()
 
     profile = ndb.TextProperty()
     picture = ndb.BlobKeyProperty()
-
 
     @classmethod
     def common_ancestor(cls, year=0):
@@ -94,6 +95,12 @@ class Player(ndb.Model):
     def create(cls, year=0):
         h = cls(parent=cls.common_ancestor(year))
         return h
+
+    @classmethod
+    def list(cls, tm, year=0):
+        return cls.query(ancestor=cls.common_ancestor(year), projection=['name', 'picture']) \
+            .filter(cls.team == tm.key) \
+            .order(cls.index)
 
 
 class year(ndb.Model):

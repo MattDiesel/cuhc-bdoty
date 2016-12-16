@@ -23,10 +23,11 @@ import webapp2
 import jinja2
 from google.appengine.ext import ndb
 from google.appengine.api import memcache, users
+from google.appengine.ext import blobstore
+from google.appengine.ext.webapp import blobstore_handlers
 
 import models
 import view
-
 
 
 class BaseHandler(webapp2.RequestHandler):
@@ -81,6 +82,7 @@ class HymnHandler(BaseHandler):
             h = ndb.Key(urlsafe=k).get()
         except:
             self.response.set_status(400)
+            return
 
         p = view.ElHymnPage(h, self.user)
 
@@ -122,6 +124,7 @@ class EditHymnHandler(BaseHandler):
             h = ndb.Key(urlsafe=k).get()
         except:
             self.response.set_status(400)
+            return
 
         h.title = self.request.get('title')
         h.text = self.request.get('text')
@@ -174,7 +177,7 @@ class TeamListHandler(BaseHandler):
         p = view.ElTeamListPage(self.user)
 
         t_q = models.Team.list()
-        p.teams = t_q.fetch(10)
+        p.team_q = t_q.fetch(10)
 
         self.response.write(p.render())
 
@@ -186,8 +189,11 @@ class TeamHandler(BaseHandler):
             t = ndb.Key(urlsafe=k).get()
         except:
             self.response.set_status(400)
+            return
 
         p = view.ElTeamPage(t, self.user)
+
+        p.players = models.Player.list(t, 0)
         
         self.response.write(p.render())
 
@@ -200,10 +206,65 @@ class ProfileHandler(BaseHandler):
             h = ndb.Key(urlsafe=k).get()
         except:
             self.response.set_status(400)
+            return
 
         p = view.ElProfilePage(h, self.user)
 
         self.response.write(p.render())
+
+
+
+class ImageHandler(blobstore_handlers.BlobstoreDownloadHandler):
+    def get(self, img):
+        if not blobstore.get(img):
+            self.error(404)
+        else:
+            self.send_blob(img)
+
+
+class TeamSetImageForm(BaseHandler):
+    def get(self):
+        k = self.request.get('t')
+        try:
+            t = ndb.Key(urlsafe=k).get()
+        except:
+            self.error(400)
+
+
+        upload_url = blobstore.create_upload_url('/team/image/set')
+        # [END upload_url]
+        # [START upload_form]
+        # To upload files to the blobstore, the request method must be "POST"
+        # and enctype must be set to "multipart/form-data".
+        self.response.out.write("""
+<html><body>
+<form action="{0}" method="POST" enctype="multipart/form-data">
+  Upload File: <input type="file" name="file"><br>
+  <input type="hidden" name="t" value="{1}">
+  <input type="submit" name="submit" value="Submit">
+</form>
+</body></html>""".format(upload_url, k))
+
+
+class TeamSetImageHandler(blobstore_handlers.BlobstoreUploadHandler):
+    def post(self):
+        k = self.request.get('t')
+        try:
+            t = ndb.Key(urlsafe=k).get()
+        except:
+            self.error(400)
+
+        try:
+            upload = self.get_uploads()[0]
+
+            t.picture = upload.key
+            t.put()
+
+            self.redirect('/team?t=' + t)
+
+        except:
+            self.error(500)
+
 
 
 class InitHandler(BaseHandler):
@@ -257,8 +318,11 @@ app = webapp2.WSGIApplication([
     ('/hymns', HymnListHandler),
     ('/hymn', HymnHandler),
     ('/teams', TeamListHandler),
+    ('/team/image', TeamSetImageForm),
+    ('/team/image/set', TeamSetImageHandler),
     ('/team', TeamHandler),
     ('/profile', ProfileHandler),
     ('/init', InitHandler),
+    ('/res/([^\.]+)?\.png', ImageHandler),
     ('/', MainHandler)
 ], debug=True)

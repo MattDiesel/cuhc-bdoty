@@ -1,15 +1,6 @@
 {% extends "base.html" %}
 
 {% block content %}
-
-<div data-role="controlgroup" data-type="horizontal" class="ui-mini">
-	<a href="/" data-rel="back" class="ui-btn ui-btn-icon-left ui-icon-back">Back</a>
-
-	{% if loggedin|default(False) %}
-		<a href="/hymns/add" class="ui-btn ui-btn-icon-left ui-icon-plus">Add</a>
-	{% endif %}
-</div>
-
 <ol class="ui-alt-icon ui-nodisc-icon" data-role="listview" data-inset="true" data-filter="true">
 	{% for i in hymn_q.fetch(200) %}
 		<li data-filtertext="{{ i.tags }}">
@@ -35,5 +26,14 @@
 		</ul>
 	</div>
 {% endif %}
+{% endblock %}
 
+{% block footer %}
+{% if loggedin|default(False) %}
+<div data-role="footer" class="bdoty-footer" data-position="fixed" data-theme="a">
+	<div data-role="controlgroup" data-type="horizontal" class="ui-mini">
+		<a href="/hymns/add" class="ui-btn ui-btn-icon-left ui-icon-plus">Add</a>
+	</div>
+</div>
+{% endif %}
 {% endblock %}

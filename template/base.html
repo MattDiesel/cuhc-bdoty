@@ -56,16 +56,10 @@
 	        </ul>
 	    </div><!-- /navbar -->
 	</div><!-- /header -->
-
-
 	<div role="main" class="ui-content" data-theme="a">
 		{% block content %}{% endblock %}
 	</div>
-
-	<div data-role="footer" class="bdoty-footer" data-position="fixed" data-id="bdoty-footer" data-theme="a">
-		<p>Copyright 2017 The CUHC Media Empire</p>
-	</div><!-- /footer -->
-
+	{% block footer %}{% endblock %}
 </div>
 </body>
 </html>

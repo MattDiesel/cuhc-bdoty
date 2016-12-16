@@ -57,3 +57,18 @@
 	margin-left: -50px;
 	padding-left: 50%;
 }
+
+
+/* Team Buttons */
+
+.bdoty-picbtn {
+	display: inline-block;
+	max-width: 350px;
+}
+
+.bdoty-picbtn img {
+	width: 100%;
+}
+.bdoty-picbtn span {
+	display: block;
+}

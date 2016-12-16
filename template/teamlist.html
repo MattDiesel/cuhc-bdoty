@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block content %}
+Teams!
+
+<ul>
+{% for t in teams %}
+	<li><a href="/team?t={{ t.key.urlsafe() }}">{{ t.name }}</a></li>
+{% endfor %}
+</ul>
+
+{% endblock %}

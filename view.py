@@ -35,8 +35,8 @@ class ElPage(ElBase):
         self.loggedin = bool(user)
         self.user = user
 
-        self.loginurl = users.create_login_url(url)
-        self.logouturl = users.create_logout_url(url)
+        self.loginurl = users.create_login_url('/') # TODO: redirect to same page
+        self.logouturl = users.create_logout_url('/')
 
         self.menu = ElCachedNav('bdoty-navmenu')
 
@@ -69,6 +69,35 @@ class ElHymnListPage(ElPage):
 
         self.navactive = 'hymns'
         self.title = 'Hymn Book'
+
+
+class ElProfilePage(ElPage):
+    def __init__(self, profile, user):
+        super(ElProfilePage, self).__init__(user, '/profile?p=' + profile.key.urlsafe(), 'profile')
+
+        self.navactive = 'profiles'
+        self.title = profile.title
+        self.text = profile.text
+        self.hkey = profile.key.urlsafe()
+
+
+class ElTeamPage(ElPage):
+    def __init__(self, team, user):
+        super(ElTeamPage, self).__init__(user, '/team?t=' + team.key.urlsafe(), 'team')
+
+        self.navactive = 'profiles'
+        self.title = team.name
+
+        self.content = "<h1>" + team.name + "</h1>"
+
+class ElTeamListPage(ElPage):
+    def __init__(self, user):
+        super(ElTeamListPage, self).__init__(user, '/teams', 'teamlist')
+
+        self.navactive = 'profiles'
+        self.title = 'Teams'
+
+        self.teams = []
 
 
 

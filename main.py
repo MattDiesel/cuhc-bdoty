@@ -90,7 +90,7 @@ class HymnHandler(BaseHandler):
 class EditHymnHandler(BaseHandler):
     def get(self):
 
-        if notself.loggedin:
+        if not self.loggedin:
             self.response.set_status(403)
             return
 
@@ -132,7 +132,7 @@ class EditHymnHandler(BaseHandler):
 
 class AddHymnHandler(BaseHandler):
     def get(self):
-        if notself.loggedin:
+        if not self.loggedin:
             self.response.set_status(403)
             return
 
@@ -153,7 +153,7 @@ class AddHymnHandler(BaseHandler):
         self.response.write(p.render())
 
     def post(self):
-        if notself.loggedin:
+        if not self.loggedin:
             self.response.set_status(403)
             return
             
@@ -163,6 +163,59 @@ class AddHymnHandler(BaseHandler):
         h.tags = self.request.get('tags')
         h.index = int(self.request.get('index'))
         h.put()
+
+
+
+
+
+
+class TeamListHandler(BaseHandler):
+    def get(self):
+        p = view.ElTeamListPage(self.user)
+
+        t_q = models.Team.list()
+        p.teams = t_q.fetch(10)
+
+        self.response.write(p.render())
+
+
+class TeamHandler(BaseHandler):
+    def get(self):
+        k = self.request.get('t')
+        try:
+            t = ndb.Key(urlsafe=k).get()
+        except:
+            self.response.set_status(400)
+
+        p = view.ElTeamPage(t, self.user)
+        
+        self.response.write(p.render())
+
+
+
+class ProfileHandler(BaseHandler):
+    def get(self):
+        k = self.request.get('p')
+        try:
+            h = ndb.Key(urlsafe=k).get()
+        except:
+            self.response.set_status(400)
+
+        p = view.ElProfilePage(h, self.user)
+
+        self.response.write(p.render())
+
+
+class InitHandler(BaseHandler):
+    def get(self):
+        models.setting.set("currentyear", "2s3s_17")
+        yr = models.year.create("2s3s_17")
+
+        for tn in ["Wanderers", "Nomads", "Squanderers", "Bedouin"]:
+            t = models.Team(parent=yr.key)
+            t.year = 2017
+            t.name = tn
+            t.put()
 
 
 
@@ -203,5 +256,9 @@ app = webapp2.WSGIApplication([
     ('/hymns/delete', EditHymnHandler),
     ('/hymns', HymnListHandler),
     ('/hymn', HymnHandler),
+    ('/teams', TeamListHandler),
+    ('/team', TeamHandler),
+    ('/profile', ProfileHandler),
+    ('/init', InitHandler),
     ('/', MainHandler)
 ], debug=True)

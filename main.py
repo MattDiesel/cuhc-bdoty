@@ -214,36 +214,65 @@ class ProfileHandler(BaseHandler):
 
 
 
-class ImageHandler(blobstore_handlers.BlobstoreDownloadHandler):
-    def get(self, img):
-        if not blobstore.get(img):
-            self.error(404)
-        else:
-            self.send_blob(img)
-
-
-class TeamSetImageForm(BaseHandler):
+class TeamEditHandler(BaseHandler):
     def get(self):
         k = self.request.get('t')
         try:
             t = ndb.Key(urlsafe=k).get()
         except:
             self.error(400)
+            return
 
+        p = view.ElPage(self.user, '/team/edit?t'+k)
+        p.navactive = 'profiles'
+        p.title = "Edit Team"
 
-        upload_url = blobstore.create_upload_url('/team/image/set')
-        # [END upload_url]
-        # [START upload_form]
-        # To upload files to the blobstore, the request method must be "POST"
-        # and enctype must be set to "multipart/form-data".
-        self.response.out.write("""
-<html><body>
-<form action="{0}" method="POST" enctype="multipart/form-data">
-  Upload File: <input type="file" name="file"><br>
-  <input type="hidden" name="t" value="{1}">
-  <input type="submit" name="submit" value="Submit">
-</form>
-</body></html>""".format(upload_url, k))
+        f = view.ElForm()
+        f.action = '/team/edit'
+
+        f.add(view.ElFormElem('hidden', 't', '', k))
+        f.add(view.ElFormElem('input', 'name', 'Name', t.name))
+        f.add(view.ElFormElem('textarea', 'summary', 'Summary', t.summary))
+
+        p.content = f.render()
+        self.response.write(p.render())
+
+    def post(self):
+        k = self.request.get('t')
+        try:
+            t = ndb.Key(urlsafe=k).get()
+        except:
+            self.error(400)
+            return
+
+        t.summary = self.request.get('summary')
+        t.name = self.request.get('name')
+
+        t.put()
+
+        self.response.redirect('/team?t=' + t)
+
+class TeamSetImageFormHandler(BaseHandler):
+    def get(self):
+        k = self.request.get('t')
+        try:
+            t = ndb.Key(urlsafe=k).get()
+        except:
+            self.error(400)
+            return
+
+        p = view.ElPage(self.user, '/team/editpic?t' + k)
+        p.navactive = 'profiles'
+        p.title = 'Edit Team Image'
+
+        f = view.ElForm()
+        f.action = blobstore.create_upload_url('/team/editpic')
+
+        f.add(view.ElFormElem('hidden', 't', '', k))
+        f.add(view.ElFormElem('image', 'picture', 'Picture', ''))
+        p.content = f.render()
+
+        self.response.write(p.render())
 
 
 class TeamSetImageHandler(blobstore_handlers.BlobstoreUploadHandler):
@@ -264,6 +293,20 @@ class TeamSetImageHandler(blobstore_handlers.BlobstoreUploadHandler):
 
         except:
             self.error(500)
+
+
+
+class ImageHandler(blobstore_handlers.BlobstoreDownloadHandler):
+    @staticmethod
+    def url(img):
+        return '/res/' + img.key + ".png"
+
+    def get(self, img):
+        if not blobstore.get(img):
+            self.error(404)
+        else:
+            self.send_blob(img)
+
 
 
 
@@ -318,8 +361,10 @@ app = webapp2.WSGIApplication([
     ('/hymns', HymnListHandler),
     ('/hymn', HymnHandler),
     ('/teams', TeamListHandler),
-    ('/team/image', TeamSetImageForm),
-    ('/team/image/set', TeamSetImageHandler),
+    ('/team/edit', TeamEditHandler),
+    ('/team/edit/submit', TeamEditSubmitHandler),
+    ('/team/editpic', TeamSetImageFormHandler),
+    ('/team/editpic/submit', TeamSetImageHandler),
     ('/team', TeamHandler),
     ('/profile', ProfileHandler),
     ('/init', InitHandler),
